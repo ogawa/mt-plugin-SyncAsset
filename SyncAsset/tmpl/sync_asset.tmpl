@@ -1,0 +1,82 @@
+<mt:setvarblock name="page_title"><__trans phrase="Sync Asset"></mt:setvarblock>
+<mt:include name="dialog/header.tmpl">
+<mt:setvarblock name="html_head" append="1">
+<style type="text/css" media="screen">
+.readonly { background: #ccc; }
+</style>
+</mt:setvarblock>
+
+<form method="post" enctype="multipart/form-data" action="<mt:var name="script_url">">
+  <input type="hidden" name="__mode" value="sync_asset" />
+  <input type="hidden" name="magic_token" value="<mt:var name="magic_token">" />
+  <input type="hidden" name="blog_id" value="<mt:var name="blog_id">" />
+
+  <mtapp:setting
+    id="base_path"
+    label_class="top-label"
+    label="<__trans phrase="Path">"
+    hint="<__trans phrase="Enter the full path of the directory you want to synchronize.">"
+    show_hint="1">
+    <div class="textarea-wrapper"><input type="text" name="base_path" value="<mt:var name="base_path" escape="html">" id="base_path" class="full-width<mt:if name="complete"> readonly</mt:if>" <mt:if name="complete">readonly="true"</mt:if> /></div>
+  </mtapp:setting>
+
+  <mtapp:setting
+    id="base_url"
+    label_class="top-label"
+    label="<__trans phrase="URL">"
+    hint="<__trans phrase="Enter the corresponding URL for the above path.">"
+    show_hint="1">
+    <div class="textarea-wrapper"><input type="text" name="base_url"  value="<mt:var name="base_url"  escape="html">" id="base_url"  class="full-width<mt:if name="complete"> readonly</mt:if>" <mt:if name="complete">readonly="true"</mt:if> /></div>
+  </mtapp:setting>
+
+  <mt:if name="success_loop">
+    <mtapp:statusmsg class="success">
+      <ul>
+        <mt:loop name="success_loop">
+          <li><mt:var name="message"></li>
+        </mt:loop>
+      </ul>
+    </mtapp:statusmsg>
+  </mt:if>
+
+  <mt:if name="error_loop">
+    <mtapp:statusmsg class="error">
+      <ul>
+        <mt:loop name="error_loop">
+          <li><mt:var name="message"></li>
+        </mt:loop>
+      </ul>
+    </mtapp:statusmsg>
+  </mt:if>
+
+  <div class="actions-bar">
+    <div class="actions-bar-inner pkg actions">
+      <mt:if name="complete">
+      <button
+        onclick="closeDialog('<mt:var name="script_url">?__mode=list_asset&amp;blog_id=<mt:var name="blog_id">'); return false"
+        type="submit"
+        accesskey="s"
+        title="<__trans phrase="Finish (f)">"
+        class="primary-button"
+        id="finish-button"
+        ><__trans phrase="Finish"></button>
+      <mt:else>
+      <button
+        type="submit"
+        accesskey="s"
+        title="<__trans phrase="Sync (s)">"
+        class="primary-button"
+        id="sync-button"
+        ><__trans phrase="Sync"></button>
+      </mt:if>
+      <button
+        onclick="closeDialog(); return false"
+        type="submit"
+        accesskey="x"
+        title="<__trans phrase="Cancel (x)">"
+        ><__trans phrase="Cancel"></button>
+    </div>
+  </div>
+</form>
+
+<mt:include name="dialog/footer.tmpl">

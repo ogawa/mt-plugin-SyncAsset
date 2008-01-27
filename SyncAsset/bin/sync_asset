@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+#
+# $Id$
+
+use strict;
+use lib 'lib', '../lib';
+use MT::Bootstrap;
+use MT;
+
+my $mt = MT->new or die MT->errstr;
+
+use Getopt::Long;
+my ($base_path, $base_url, $blog_id, $user_id);
+Getopt::Long::GetOptions(
+    "path=s"    => \$base_path,
+    "url=s"     => \$base_url,
+    "blog_id=i" => \$blog_id,
+    "user_id=i" => \$user_id,
+);
+unless ($base_path && $base_url && $blog_id && $user_id) {
+    print "Usage: $0\n\t\t--path=<base_path> --url=<base_url>\n\t\t--blog_id=<N> --user_id=<N>\n";
+    exit;
+}
+$base_url .= '/' unless $base_url =~ m!/$!;
+
+require File::Find::Rule;
+require File::Spec;
+require File::Basename;
+require SyncAsset;
+
+for my $file (File::Find::Rule->relative->file->in($base_path)) {
+    my $file_path = File::Spec->catfile($base_path, $file);
+    my $file_name = File::Basename::basename($file);
+    my($file_ext) = $file =~ /\.([^.]*)$/;
+    my $url = $file;
+    $url =~ s!\\!/!g;
+    $url =~ s!^/!!;
+    $url = $base_url . $url;
+    if (SyncAsset::create_asset({
+	file_path => $file_path,
+	file_name => $file_name,
+	file_ext  => $file_ext,
+	url       => $url,
+	blog_id   => $blog_id,
+	user_id   => $user_id,
+    })) {
+	print "File '[_1]' added.\n";
+    } else {
+	print "File '[_1]' failed to add.\n";
+    }
+}
+
+1;
