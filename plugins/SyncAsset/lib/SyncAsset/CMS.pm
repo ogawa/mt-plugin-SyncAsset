@@ -75,7 +75,8 @@ sub transform_list_asset {
     my $q = $app->param;
     if ($q->param('blog_id')) {
 	my $old = quotemeta(q{<$mt:include name="include/header.tmpl" id="header_include"$>});
-	my $new = q{<mt:setvarblock name="content_header" append="1"><p class="create-new-link"><a class="icon-left icon-create" onclick="return openDialog(null, 'sync_asset_start', 'blog_id=<mt:var name="blog_id">')" href="javascript:void(0)">} . $plugin->translate("Sync Asset") . q{</a></p></mt:setvarblock>};
+#	my $new = q{<mt:setvarblock name="content_header" append="1"><p class="create-new-link"><a class="icon-left icon-create" onclick="return openDialog(null, 'sync_asset_start', 'blog_id=<mt:var name="blog_id">')" href="javascript:void(0)">} . $plugin->translate("Sync Asset") . q{</a></p></mt:setvarblock>};
+	my $new = q{<mt:setvarblock name="content_header" append="1"><ul><li><a class="icon-left icon-create" onclick="return jQuery.fn.mtDialog.open('<mt:var name="script_url">?__mode=sync_asset_start&amp;blog_id=<mt:var name="blog_id">')" href="javascript:void(0)">} . $plugin->translate("Sync Asset") . q{</a></li></ul></mt:setvarblock>};
 	$$tmpl =~ s/($old)/$new$1/;
     }
 }

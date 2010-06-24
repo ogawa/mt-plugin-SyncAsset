@@ -53,7 +53,7 @@
     <div class="actions-bar-inner pkg actions">
       <mt:if name="complete">
       <button
-        onclick="closeDialog('<mt:var name="script_url">?__mode=list_asset&amp;blog_id=<mt:var name="blog_id">'); return false"
+        onclick="if ( window.opener ) { window.close(); } else { parent.jQuery.fn.mtDialog.close('<mt:var name="script_url">?__mode=list_asset&amp;blog_id=<mt:var name="blog_id">') }"
         type="submit"
         accesskey="s"
         title="<__trans phrase="Finish (f)">"
@@ -70,11 +70,12 @@
         ><__trans phrase="Sync"></button>
       </mt:if>
       <button
-        onclick="closeDialog(); return false"
+        id="close-button"
+        onclick="if ( window.opener ) { window.close(); } else { parent.jQuery.fn.mtDialog.close(); }"
         type="submit"
         accesskey="x"
-        title="<__trans phrase="Cancel (x)">"
-        ><__trans phrase="Cancel"></button>
+        title="<__trans phrase="Close (x)">"
+        ><__trans phrase="Close"></button>
     </div>
   </div>
 </form>
